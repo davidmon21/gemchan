@@ -17,16 +17,16 @@ module Gemchan
         end
         get '/:board/createpost/:postcontent' do
             board = Board.find_by_upath(params[:board])
-            board.posts.create(content: params[:postcontent])
+            op = board.posts.create(content: params[:postcontent])[:id]
+            board.ops.create(post_id: [:id])
         end
         get '/:board/:pid' do
             @post = Post.find(params[:pid])[:content]
-            @replies = @post.replys
+            #@replies = @post.replys
             erb :thread
         end
         get '/:board/:pid/reply/:content' do
-            @post = Post.find(params[:pid])
-            @post.replys.create(content: params[:content])
+            Board.find_by_path(params[:board]).posts.create(content: params[:content], op_id: params[:pid])
         end
     end
 end
