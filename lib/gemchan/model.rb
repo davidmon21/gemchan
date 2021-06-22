@@ -8,12 +8,10 @@ CREATE TABLE boards (
     description TEXT
 );
 CREATE TABLE ops (
-    post_id INTEGER NOT NULL,
+    post_id INTEGER,
     board_id      INTEGER NOT NULL,
     FOREIGN KEY (board_id)
-       REFERENCES boards (id),
-    FOREIGN KEY (post_id)
-       REFERENCES posts (id)
+       REFERENCES boards (id)
 );
 CREATE TABLE posts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

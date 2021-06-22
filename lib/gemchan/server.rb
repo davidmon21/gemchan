@@ -1,6 +1,7 @@
 require 'sinatra'
 module Gemchan
     class Server < Sinatra::Base
+        enable :sessions
         set :root, "/Users/david/chandir"
         get '/' do
             #Gemchan::Board.find_each do |board|
@@ -18,15 +19,21 @@ module Gemchan
         get '/:board/createpost/:postcontent' do
             board = Board.find_by_upath(params[:board])
             op = board.posts.create(content: params[:postcontent])[:id]
-            board.ops.create(post_id: [:id])
+            board.ops.create(post_id: op)
         end
-        get '/:board/:pid' do
-            @post = Post.find(params[:pid])[:content]
-            #@replies = @post.replys
+        get '/:board/:pid' do 
+            @op = Post.find(params[:pid])
+            @posts = Post.where "op_id = #{params[:pid]}"
             erb :thread
         end
         get '/:board/:pid/reply/:content' do
-            Board.find_by_path(params[:board]).posts.create(content: params[:content], op_id: params[:pid])
+            board = Board.find_by_upath(params[:board])
+            board.posts.create(content: params[:content], op_id: params[:pid])
+        end
+        post '/reply' do
+            #broken
+            board = Board.find_by_upath(params[:board])
+            board.posts.create(content: params[:content], op_id: params[:pid])
         end
     end
 end
