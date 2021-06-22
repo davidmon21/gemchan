@@ -1,0 +1,9 @@
+<form action="/create_op" method="POST">
+    <input type="text-area" name="content" />
+    <input type="hidden" name="board" value="<%= Board.find_by_upath(params[:board]) %>" />
+    <input type="submit" name="submit" />
+</form>
+<% @board.posts.each do |post| %>
+    <%= post[:content] %>
+    <a href="<%= @board[:upath] %>/<%= post[:id] %>">view</a>
+<% end %>

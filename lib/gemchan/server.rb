@@ -16,24 +16,20 @@ module Gemchan
             @board = Board.find_by_upath(params[:board])
             erb :board
         end
-        get '/:board/createpost/:postcontent' do
-            board = Board.find_by_upath(params[:board])
-            op = board.posts.create(content: params[:postcontent])[:id]
-            board.ops.create(post_id: op)
-        end
         get '/:board/:pid' do 
             @op = Post.find(params[:pid])
             @posts = Post.where "op_id = #{params[:pid]}"
             erb :thread
         end
-        get '/:board/:pid/reply/:content' do
-            board = Board.find_by_upath(params[:board])
-            board.posts.create(content: params[:content], op_id: params[:pid])
-        end
         post '/reply' do
-            #broken
+            board = Board.find(params[:board])
+            op = params[:op]
+            board.posts.create(content: params[:content], op_id: params[:op])
+        end
+        post '/create_op' do
             board = Board.find_by_upath(params[:board])
-            board.posts.create(content: params[:content], op_id: params[:pid])
+            op = board.posts.create(content: params[:content])
+            board.ops.create(post_id: op)
         end
     end
 end
