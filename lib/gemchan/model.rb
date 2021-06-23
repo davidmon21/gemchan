@@ -18,6 +18,7 @@ CREATE TABLE posts (
     content TEXT,
     media TEXT,
     op_id      INTEGER,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     board_id      INTEGER NOT NULL,
     FOREIGN KEY (board_id)
        REFERENCES boards (id)
