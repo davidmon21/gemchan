@@ -54,12 +54,13 @@ module Gemchan
             board = Board.find(params[:board])
             op = params[:op]
             board.posts.create(content: params[:content], op_id: params[:op])
+            board.posts.find(params[:op_id]).touch
         end
         post '/create_op' do
             board = Board.find(params[:board])
             op = board.posts.create(content: params[:content])
-            op[:op_id] = op[:id]
-            board.ops.create(post_id: op[:id])
+            op_post = board.ops.create(post_id: op[:id])
+            op.update(:op_id => op_post[:id])
         end
     end
 end
