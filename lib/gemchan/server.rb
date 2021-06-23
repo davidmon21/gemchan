@@ -19,6 +19,7 @@ module Gemchan
         get '/:board/:pid' do 
             @op = Post.find(params[:pid])
             @posts = Post.where "op_id = #{params[:pid]}"
+            @posts = @posts.sort_by(&:created_at).reverse
             erb :thread
         end
         post '/reply' do
@@ -30,7 +31,7 @@ module Gemchan
             board = Board.find(params[:board])
             op = board.posts.create(content: params[:content])
             op[:op_id] = op[:id]
-            board.ops.create(post_id: op)
+            board.ops.create(post_id: op[:id])
         end
     end
 end
