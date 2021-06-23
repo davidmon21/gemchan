@@ -1,26 +1,54 @@
 require 'sinatra'
 module Gemchan
+    class InfoCache
+        @@boards = {}
+        def self.init
+            Gemchan::Board.all.each do |board|
+                @@boards[board[:upath]] = board[:id]
+            end
+        end
+        def self.boards_dict
+            return @@boards
+        end
+        def self.update_boards_dict
+            Gemchan::Board.all.each do |board|
+                @@boards[board[:upath]] = board[:id]
+            end
+        end
+    end
+
     class Server < Sinatra::Base
+        configure do
+            InfoCache::init()
+        end
+
         enable :sessions
         set :root, "/Users/david/chandir"
+
         get '/' do
-            #Gemchan::Board.find_each do |board|
-            #    @posts = board.posts
-            #end
             erb :index 
         end
-        get '/createboard/:p' do
-            Board.create(upath: params[:p], name: 'b', description: 'random')
+        get '/manage' do
+            erb :admin
         end
         get '/:board' do
-            @board = Board.find_by_upath(params[:board])
+            @board = Board.find(InfoCache::boards_dict[params[:board]])
             erb :board
         end
         get '/:board/:pid' do 
             @op = Post.find(params[:pid])
             @posts = Post.where "op_id = #{params[:pid]}"
-            @posts = @posts.sort_by(&:created_at).reverse
+            @posts = @posts.sort_by(&:created_at)
+            #.reverse
             erb :thread
+        end
+        post '/createboard' do
+            unless InfoCache::boards_dict.has_key? params[:upath] 
+                Board.create(upath: params[:upath], name: params[:name], description: params[:description])
+                InfoCache::update_boards_dict
+            else 
+                puts "board exists"
+            end
         end
         post '/reply' do
             board = Board.find(params[:board])

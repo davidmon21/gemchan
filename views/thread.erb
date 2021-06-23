@@ -1,6 +1,6 @@
 <form action="/reply" method="POST">
     <input type="text-area" name="content" />
-    <input type="hidden" name="board" value="<%= Gemchan::Board.find_by_upath(params[:board])[:id] %>" />
+    <input type="hidden" name="board" value=" <%= Gemchan::InfoCache::boards_dict[params[:board]] %>" />
     <input type="hidden" name="op" value="<%= params[:pid] %>" />
     <input type="submit" name="submit" />
 </form>
