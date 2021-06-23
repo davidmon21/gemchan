@@ -22,7 +22,7 @@ david <david DOT monfort1989 AT gmail DOT com>
 Bugs
 ----
 
-Report bugs to http://github.com/kjellm/skeleton/issues
+Report bugs to http://github.com/quietok/gemchan
 	
 License
 -------
