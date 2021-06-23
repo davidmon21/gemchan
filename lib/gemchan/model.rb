@@ -9,6 +9,7 @@ CREATE TABLE boards (
 );
 CREATE TABLE ops (
     post_id INTEGER,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     board_id      INTEGER NOT NULL,
     FOREIGN KEY (board_id)
        REFERENCES boards (id)
