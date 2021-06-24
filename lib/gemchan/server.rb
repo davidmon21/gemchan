@@ -42,6 +42,7 @@ module Gemchan
             #.reverse
             erb :thread
         end
+        #no
         post '/createboard' do
             unless InfoCache::boards_dict.has_key? params[:upath] 
                 Board.create(upath: params[:upath], name: params[:name], description: params[:description])
