@@ -2,8 +2,9 @@ require 'sinatra'
 module Gemchan
     class InfoCache
         @@boards = {}
+        puts "here"
         def self.init
-            Gemchan::Board.all.each do |board|
+            Board.find_each do |board|
                 @@boards[board[:upath]] = board[:id]
             end
         end
@@ -11,7 +12,7 @@ module Gemchan
             return @@boards
         end
         def self.update_boards_dict
-            Gemchan::Board.all.each do |board|
+            Board.find_each do |board|
                 @@boards[board[:upath]] = board[:id]
             end
         end
@@ -24,7 +25,28 @@ module Gemchan
 
         enable :sessions
         set :root, "/Users/david/chandir"
+        post '/createboard' do
+            unless InfoCache::boards_dict.has_key? params[:upath] 
+                Board.create(upath: params[:upath], name: params[:name], description: params[:description])
+                InfoCache::update_boards_dict
+            else 
+                puts "board exists"
+            end
+        end
+        post '/reply' do
+            board = Board.find(params[:board])
+            op = params[:op]
+            board.posts.create(content: params[:content], op_id: params[:op])
+            board.posts.find(params[:op]).touch
+        end
 
+        post '/create_op' do
+            board = Board.find(params[:board])
+            op = board.posts.create(content: params[:content])
+            op_post = board.ops.create(post_id: op[:id])
+            op.op_id = op.id
+            op.save
+        end
         get '/' do
             erb :index 
         end
@@ -43,25 +65,5 @@ module Gemchan
             erb :thread
         end
         #no
-        post '/createboard' do
-            unless InfoCache::boards_dict.has_key? params[:upath] 
-                Board.create(upath: params[:upath], name: params[:name], description: params[:description])
-                InfoCache::update_boards_dict
-            else 
-                puts "board exists"
-            end
-        end
-        post '/reply' do
-            board = Board.find(params[:board])
-            op = params[:op]
-            board.posts.create(content: params[:content], op_id: params[:op])
-            board.posts.find(params[:op_id]).touch
-        end
-        post '/create_op' do
-            board = Board.find(params[:board])
-            op = board.posts.create(content: params[:content])
-            op_post = board.ops.create(post_id: op[:id])
-            op.update(:op_id => op_post[:id])
-        end
     end
 end
