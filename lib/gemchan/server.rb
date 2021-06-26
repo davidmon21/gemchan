@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'fileutils'
 module Gemchan
     class InfoCache
         @@boards = {}
@@ -36,13 +37,20 @@ module Gemchan
         post '/reply' do
             board = Board.find(params[:board])
             op = params[:op]
-            board.posts.create(content: params[:content], op_id: params[:op])
+            tempfile = params[:file][:tempfile] 
+            filename = params[:file][:filename] 
+            FileUtils.cp(tempfile.path, "/Users/david/chandir/public/uploads/#{filename}")
+            board.posts.create(content: params[:content], op_id: params[:op], media: "/public/uploads/#{filename}")
             board.posts.find(params[:op]).touch
+            
         end
 
         post '/create_op' do
             board = Board.find(params[:board])
-            op = board.posts.create(content: params[:content])
+            tempfile = params[:file][:tempfile] 
+            filename = params[:file][:filename] 
+            FileUtils.cp(tempfile.path, "/Users/david/chandir/public/uploads/#{filename}")
+            op = board.posts.create(content: params[:content],media: "/public/uploads/#{filename}")
             op_post = board.ops.create(post_id: op[:id])
             op.op_id = op.id
             op.save

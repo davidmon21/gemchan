@@ -1,6 +1,9 @@
 <form action="/create_op" method="POST">
-    <input type="text-area" name="content" />
+    <textarea name="content" rows="6" cols="50" />Post...</textarea>
     <input type="hidden" name="board" value="<%= Gemchan::InfoCache::boards_dict[params[:board]] %>" />
+    <br>
+    <input name="file" type="file" />
+    <br>
     <input type="submit" name="submit" />
 </form>
 <% @board.posts.each do |post| %>
