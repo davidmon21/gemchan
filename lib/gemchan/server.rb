@@ -25,7 +25,7 @@ module Gemchan
         end
 
         enable :sessions
-        set :root, "/Users/david/chandir"
+        #set :root, ChanController::root
         post '/createboard' do
             unless InfoCache::boards_dict.has_key? params[:upath] 
                 Board.create(upath: params[:upath], name: params[:name], description: params[:description])
@@ -58,6 +58,7 @@ module Gemchan
             op.op_id = op.id
             op.save
         end
+
         get '/' do
             erb :index 
         end

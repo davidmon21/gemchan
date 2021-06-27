@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 require 'gemchan'
+#Gemchan::ChanController::init "/Users/david/chandir"
+Gemchan::Server.set :root, "/Users/david/chandir"
 
 Gemchan::Server.run!
 # ...
