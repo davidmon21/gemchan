@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.summary     = "not now"
   s.description = "not now"
   
-  s.files         = ["lib/gemchan.rb", "lib/gemchan/model.rb","lib/gemchan/server.rb", "lib/gemchan/version.rb"]
+  s.files         = ["lib/gemchan.rb", "lib/gemchan/model.rb","lib/gemchan/server.rb", "lib/gemchan/version.rb", "lib/gemchan/controler.rb"]
   s.executables   = ["gemchan"]
   s.require_paths = ["lib"]
 

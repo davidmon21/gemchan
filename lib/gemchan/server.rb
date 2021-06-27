@@ -36,21 +36,24 @@ module Gemchan
         end
         post '/reply' do
             board = Board.find(params[:board])
-            op = params[:op]
-            tempfile = params[:file][:tempfile] 
-            filename = params[:file][:filename] 
-            FileUtils.cp(tempfile.path, "/Users/david/chandir/public/uploads/#{filename}")
-            board.posts.create(content: params[:content], op_id: params[:op], media: "/public/uploads/#{filename}")
+            if params[:file] == nil
+                filepath = nil
+            else
+                filepath = ChanController.handle_file(params[:file][:tempfile],params[:file][:filename])
+            end
+            board.posts.create(content: params[:content], op_id: params[:op], media: filepath)
             board.posts.find(params[:op]).touch
             
         end
 
         post '/create_op' do
             board = Board.find(params[:board])
-            tempfile = params[:file][:tempfile] 
-            filename = params[:file][:filename] 
-            FileUtils.cp(tempfile.path, "/Users/david/chandir/public/uploads/#{filename}")
-            op = board.posts.create(content: params[:content],media: "/public/uploads/#{filename}")
+            if params[:file] == nil
+                filepath = nil
+            else
+                filepath = ChanController.handle_file(params[:file][:tempfile],params[:file][:filename])
+            end
+            op = board.posts.create(content: params[:content],media: filepath)
             op_post = board.ops.create(post_id: op[:id])
             op.op_id = op.id
             op.save
