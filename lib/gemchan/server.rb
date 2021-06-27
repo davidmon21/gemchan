@@ -1,4 +1,5 @@
 require 'sinatra'
+require "sinatra/multi_route"
 require 'fileutils'
 module Gemchan
     class InfoCache
@@ -20,6 +21,7 @@ module Gemchan
     end
 
     class Server < Sinatra::Base
+        register Sinatra::MultiRoute
         configure do
             InfoCache::init()
         end
@@ -65,17 +67,23 @@ module Gemchan
         get '/manage' do
             erb :admin
         end
-        get '/:board' do
-            @board = Board.find(InfoCache::boards_dict[params[:board]])
-            erb :board
+        
+        route :get, InfoCache::boards_dict.keys.map{|x| "/"+x} do
+            #get "/:board" do
+                @board = Board.find(InfoCache::boards_dict[File.basename(request.path)])
+                erb :board
+            #end
         end
-        get '/:board/:pid' do 
+        
+        route :get, InfoCache::boards_dict.keys.map{|x| "/"+x+"/:pid"} do 
             @op = Post.find(params[:pid])
             @posts = Post.where "op_id = #{params[:pid]}"
             @posts = @posts.sort_by(&:created_at)
             #.reverse
             erb :thread
         end
+        
+        
         #no
     end
 end
