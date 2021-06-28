@@ -16,6 +16,8 @@ CREATE TABLE ops (
 );
 CREATE TABLE posts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    subject TEXT,
+    name TEXT,
     content TEXT,
     media TEXT,
     op_id      INTEGER,
