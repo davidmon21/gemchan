@@ -1,89 +1,52 @@
 require 'sinatra'
-require "sinatra/multi_route"
-require 'fileutils'
+
 module Gemchan
-    class InfoCache
-        @@boards = {}
-        puts "here"
-        def self.init
-            Board.find_each do |board|
-                @@boards[board[:upath]] = board[:id]
-            end
-        end
-        def self.boards_dict
-            return @@boards
-        end
-        def self.update_boards_dict
-            Board.find_each do |board|
-                @@boards[board[:upath]] = board[:id]
-            end
-        end
-    end
 
     class Server < Sinatra::Base
-        register Sinatra::MultiRoute
         configure do
-            InfoCache::init()
+            Gemchan::ChanController::init( )
         end
 
         enable :sessions
-        #set :root, ChanController::root
-        post '/createboard' do
-            unless InfoCache::boards_dict.has_key? params[:upath] 
-                Board.create(upath: params[:upath], name: params[:name], description: params[:description])
-                InfoCache::update_boards_dict
-            else 
-                puts "board exists"
-            end
-        end
+        set :root, ChanController::root
+
         post '/reply' do
-            board = Board.find(params[:board])
-            if params[:file] == nil
-                filepath = nil
-            else
-                filepath = ChanController.handle_file(params[:file][:tempfile],params[:file][:filename])
-            end
-            board.posts.create(content: params[:content], op_id: params[:op], media: filepath)
-            board.posts.find(params[:op]).touch
-            
+            Gemchan::ChanController::create_post(params)
         end
 
         post '/create_op' do
-            board = Board.find(params[:board])
-            if params[:file] == nil
-                filepath = nil
-            else
-                filepath = ChanController.handle_file(params[:file][:tempfile],params[:file][:filename])
-            end
-            op = board.posts.create(content: params[:content],media: filepath)
-            op_post = board.ops.create(post_id: op[:id])
-            op.op_id = op.id
-            op.save
+            Gemchan::ChanController::create_post(params, is_op=true)
         end
 
         get '/' do
             erb :index 
         end
+        
+        Gemchan::ChanController::boards_dict.keys.each do |route|
+            get route do
+                @board = Board.find(Gemchan::ChanController::boards_dict[route])
+                erb :board
+            end
+
+            get route+'/:pid' do
+                @bid = Gemchan::ChanController::boards_dict[route]
+                @op = Post.find(params[:pid])
+                @posts = Post.where "op_id = #{params[:pid]}"
+                @posts = @posts.sort_by(&:created_at)
+                #.reverse
+                erb :thread
+            end
+        end
+
         get '/manage' do
             erb :admin
         end
-        
-        route :get, InfoCache::boards_dict.keys.map{|x| "/"+x} do
-            #get "/:board" do
-                @board = Board.find(InfoCache::boards_dict[File.basename(request.path)])
-                erb :board
-            #end
+
+        post '/createboard' do
+            Gemchan::ChanController::createboard(params)
+            Gemchan::ChanController::update_boards_dict
         end
-        
-        route :get, InfoCache::boards_dict.keys.map{|x| "/"+x+"/:pid"} do 
-            @op = Post.find(params[:pid])
-            @posts = Post.where "op_id = #{params[:pid]}"
-            @posts = @posts.sort_by(&:created_at)
-            #.reverse
-            erb :thread
-        end
-        
-        
-        #no
+
+       
     end
 end

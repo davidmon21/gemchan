@@ -30,8 +30,9 @@ CREATE TABLE posts (
 
 module Gemchan
     
-    ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: '/Users/david/chandir/gemchan.db')
-    
+    config = Gemchan::ChanController::configurations()
+    ActiveRecord::Base.establish_connection(adapter: config[:adapter], database: config[:db])
+
     class Board < ActiveRecord::Base
         validates_presence_of :name
         validates_presence_of :upath

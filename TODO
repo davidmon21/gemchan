@@ -1,0 +1,12 @@
+routes - finish up
+mime check files - thumbnail generation
+init and controller seperation where needed
+admin session
+manage page
+names, subject db
+change format of board upath in db
+redirects in reply and create thread
+"install" in gemchan
+command line flags for gemchan
+
+move more logic into controller
