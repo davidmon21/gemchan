@@ -4,6 +4,7 @@ module Gemchan
         @@root = "/var/www"
         @@config_path = File.join(Dir.home, '.config', 'gemchan', 'config.yaml')
         @@configurations = Object
+        @@allowed_ftypes = ['png','jpeg','gif','webp']
 
         def self.init
             Board.find_each do |board|
@@ -43,8 +44,22 @@ module Gemchan
         end
 
         def self._handle_file(tempfile, filename)
-            FileUtils.cp(tempfile.path, File.join( @@root, "public", "uploads", filename))
-            return "/uploads/#{filename}"
+            mtype = MimeMagic.by_magic(File.open(tempfile.path))
+            dirp = File.join( @@root, "public", "uploads")
+            unless @@allowed_ftypes.include? mtype.subtype
+                return nil
+            end
+            md5t = Digest::MD5.file(tempfile.path).hexdigest
+            newname = File.join(dirp, "#{md5t}.#{mtype.subtype}")
+            thumbname = File.join(dirp, "#{md5t}.thumb.#{mtype.subtype}")
+            servename = "/uploads/#{md5t}.#{mtype.subtype}"
+            if mtype.mediatype == 'image'
+                image = Magick::Image.read(tempfile.path).first
+                image.thumbnail(image.columns*(300.0/image.columns), image.rows*(300.0/image.columns)).write(thumbname)
+            end
+            FileUtils.cp(tempfile.path, newname)
+
+            return servename
         end
 
         def self.boards_dict

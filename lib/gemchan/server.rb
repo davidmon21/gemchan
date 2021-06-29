@@ -12,10 +12,12 @@ module Gemchan
 
         post '/reply' do
             Gemchan::ChanController::create_post(params)
+            redirect back
         end
 
         post '/create_op' do
             Gemchan::ChanController::create_post(params, is_op=true)
+            redirect back
         end
 
         get '/' do
@@ -37,6 +39,8 @@ module Gemchan
                 erb :thread
             end
         end
+
+        ##session and authentication needed for below
 
         get '/manage' do
             erb :admin

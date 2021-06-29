@@ -1,6 +1,6 @@
-<form action="/create_op" method="POST">
+<form action="/create_op" enctype="multipart/form-data" method="POST">
     <textarea name="content" rows="6" cols="50" />Post...</textarea>
-    <input type="hidden" name="board" value="<%= Gemchan::InfoCache::boards_dict[params[:board]] %>" />
+    <input type="hidden" name="board" value="<%= @board.id %>" />
     <br>
     <input name="file" type="file" />
     <br>
