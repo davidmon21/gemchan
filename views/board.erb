@@ -1,12 +1,49 @@
 <form action="/create_op" enctype="multipart/form-data" method="POST">
     <textarea name="content" rows="6" cols="50" />Post...</textarea>
-    <input type="hidden" name="board" value="<%= @board.id %>" />
+    <input type="hidden" name="board" value="<%= @page_data[:bid] %>" />
     <br>
     <input name="file" type="file" />
     <br>
     <input type="submit" name="submit" />
 </form>
-<% @board.posts.each do |post| %>
-    <%= post[:content] %>
-    <a href="<%= @board[:upath] %>/<%= post[:id] %>">view</a>
+<% @page_data.delete(:bid) %>
+<% @page_data.each do |op, posts| %>
+    <div id="op_post">
+    <% op_post = Gemchan::Post.find(op) %>
+    <div id="info">
+    <a href="#<%= op_post[:id] %>"><%= op_post[:id] %></a> <%= op_post[:created_at] %>
+    </div>
+    <div id="media">
+    <% if op_post.media != nil %>
+    <% imgpiece = op_post.media.split('.') %>
+    <a href='<%= op_post.media %>'><img src="<%= imgpiece[0]+'.thumb.'+imgpiece[1] %>"/></a>
+    <% end %>
+    </div>
+    <div id="content" >
+    <%= op_post[:content] %>
+    </div>
+    <a href="<%= @route %>/<%= op_post[:id] %>">view</a>
+    </div>
+    <br>
+    <% if posts != nil then %>
+<% posts.each do |post| %>
+    <% unless post.id == op %>
+    <div id="post">
+        <div id="info">
+            <a href="#<%= post[:id] %>"><%= post[:id] %></a> <%= post[:created_at] %>
+        </div>
+        <% if post.media != nil %>
+        <div id="media">
+            <% imgpiece = post.media.split('.') %>
+            <a href='<%= post.media %>'><img src="<%= imgpiece[0]+'.thumb.'+imgpiece[1] %>"/></a>
+        </div>
+        <% end %>
+        <div id="content">
+            <%= post[:content] %>
+        </div>
+    </div>
+    <br>
+    <% end %>
+<% end %>
+<% end %>
 <% end %>
