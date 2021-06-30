@@ -26,7 +26,8 @@ module Gemchan
         
         Gemchan::ChanController::boards_dict.keys.each do |route|
             get route do
-                @board = Board.find(Gemchan::ChanController::boards_dict[route])
+                @page_data = Gemchan::ChanController::board_page_data(route)
+                @route = route
                 erb :board
             end
 

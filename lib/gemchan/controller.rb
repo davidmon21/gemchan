@@ -34,7 +34,9 @@ module Gemchan
             post = board.posts.create(content: params[:content], media: filepath)
             
             unless is_op
-                board.posts.find(params[:op]).touch
+                op_post = board.posts.find(params[:op])
+                op_post.touch
+                op_post.save
                 post.op_id = params[:op]
             else
                 op_post = board.ops.create(post_id: post[:id])
@@ -82,6 +84,17 @@ module Gemchan
             else 
                 puts "board exists"
             end
+        end
+
+        def self.board_page_data(route)
+            page_data = {}
+            board = Board.find(@@boards[route])
+            page_data[:bid] = board.id
+            ops = board.ops.sort_by(&:updated_at).reverse
+            for op in ops
+                page_data[op.post_id] = board.posts.where("op_id = #{op.post_id}").last(4)
+            end
+            return page_data
         end
 
     end
