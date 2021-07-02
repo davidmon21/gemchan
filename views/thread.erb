@@ -1,4 +1,8 @@
 <form action="/reply" enctype="multipart/form-data" method="POST">
+    <input type="text-area" name="name" value="Anonymous" />
+    <br>
+    <input type="text-area" name="subject" />
+    <br>
     <textarea name="content" rows="6" cols="50" />Post...</textarea>
     <input type="hidden" name="board" value=" <%= @bid %>" />
     <input type="hidden" name="op" value="<%= params[:pid] %>" />

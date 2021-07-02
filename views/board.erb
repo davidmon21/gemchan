@@ -1,4 +1,8 @@
 <form action="/create_op" enctype="multipart/form-data" method="POST">
+    <input type="text-area" name="name" value="Anonymous" />
+    <br>
+    <input type="text-area" name="subject" />
+    <br>
     <textarea name="content" rows="6" cols="50" />Post...</textarea>
     <input type="hidden" name="board" value="<%= @page_data[:bid] %>" />
     <br>
@@ -11,6 +15,7 @@
     <div id="op_post">
     <% op_post = Gemchan::Post.find(op) %>
     <div id="info">
+    <%= op_post[:name] %>
     <a href="#<%= op_post[:id] %>"><%= op_post[:id] %></a> <%= op_post[:created_at] %>
     </div>
     <div id="media">
@@ -20,6 +25,8 @@
     <% end %>
     </div>
     <div id="content" >
+    <a href="<%= @route %>/<%= op_post[:id] %>"><%= op_post[:subject] %></a>
+    <br>
     <%= op_post[:content] %>
     </div>
     <a href="<%= @route %>/<%= op_post[:id] %>">view</a>
