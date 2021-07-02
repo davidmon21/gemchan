@@ -31,11 +31,11 @@ module Gemchan
                 filepath = self._handle_file(params[:file][:tempfile],params[:file][:filename])
             end
 
-            post = board.posts.create(content: params[:content], media: filepath)
+            post = board.posts.create(name: params[:name], subject: params[:subject], content: params[:content], media: filepath)
             
             unless is_op
-                op_post = board.posts.find(params[:op])
-                op_post.touch
+                op_post = board.ops.where("post_id = #{params[:op]}")
+                op_post.reload
                 op_post.save
                 post.op_id = params[:op]
             else
@@ -84,6 +84,7 @@ module Gemchan
             else 
                 puts "board exists"
             end
+            self.init
         end
 
         def self.board_page_data(route)
@@ -95,6 +96,12 @@ module Gemchan
                 page_data[op.post_id] = board.posts.where("op_id = #{op.post_id}").last(4)
             end
             return page_data
+        end
+
+        def self.thread_page_data(thread, route)
+            bid = Gemchan::ChanController::boards_dict[route]
+            posts = Post.where("op_id = #{thread}").sort_by(&:created_at)
+            return bid, posts
         end
 
     end

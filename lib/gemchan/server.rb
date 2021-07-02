@@ -32,11 +32,8 @@ module Gemchan
             end
 
             get route+'/:pid' do
-                @bid = Gemchan::ChanController::boards_dict[route]
-                @op = Post.find(params[:pid])
-                @posts = Post.where "op_id = #{params[:pid]}"
-                @posts = @posts.sort_by(&:created_at)
-                #.reverse
+                @op = params[:pid]
+                @bid, @posts = Gemchan::ChanController::thread_page_data(@op, route)
                 erb :thread
             end
         end
