@@ -81,9 +81,9 @@ module Gemchan
             unless @@boards.has_key? params[:upath] 
                 @@boards[params[:upath]] = Board.create(upath: params[:upath], name: params[:name], description: params[:description]).id
             else 
-                puts "board exists"
+                "board exists"
             end
-            self.init
+            self.update_boards_dict
         end
 
         def self.board_page_data(route)

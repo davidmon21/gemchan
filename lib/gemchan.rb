@@ -3,6 +3,8 @@ require 'gemchan/version'
 module Gemchan
   require 'fileutils'
   require 'yaml'
+  require 'warden'
+  require 'bcrypt'
   require 'sinatra'
   require 'rmagick'
   require 'mimemagic'

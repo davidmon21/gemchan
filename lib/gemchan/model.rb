@@ -7,6 +7,12 @@ CREATE TABLE boards (
     name TEXT,
     description TEXT
 );
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT,
+    password TEXT,
+    perms INTEGER
+);
 CREATE TABLE ops (
     post_id INTEGER,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -50,6 +56,18 @@ module Gemchan
     class Op < ActiveRecord::Base
         validates_presence_of :post_id
         belongs_to :board
+    end
+
+    class User < ActiveRecord::Base
+        validates_presence_of :username
+        validates_presence_of :password
+        def authenticate(attempted_password)
+            if self.password == attempted_password
+              true
+            else
+              false
+            end
+        end
     end
 
 end
