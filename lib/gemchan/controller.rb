@@ -12,13 +12,18 @@ module Gemchan
             end
             @@configurations = YAML.load(File.read(@@config_path))
             @@root = @@configurations[:root]
+            @@configurations[:boards] = @@boards
+            self.update_conf
+        end
+
+        def self.update_conf
+            File.open(@@config_path, 'w') do |file|
+                file.write(@@configurations.to_yaml)
+            end
         end
 
         def self.configurations
-            if @@configurations == Object
-                @@configurations = YAML.load(File.read(@@config_path))
-            end
-            return @@configurations
+            return YAML.load(File.read(@@config_path))
         end
 
         def self.create_post(params, is_op=false)
@@ -43,6 +48,10 @@ module Gemchan
             end
             post.save
         end
+        
+        def self.delete_post(params)
+            puts params.inspect
+        end
 
         def self._handle_file(tempfile, filename)
             mtype = MimeMagic.by_magic(File.open(tempfile.path))
@@ -64,7 +73,7 @@ module Gemchan
         end
 
         def self.boards_dict
-            return @@boards
+            return YAML.load(File.read(@@config_path))[:boards]
         end
 
         def self.root
@@ -75,6 +84,8 @@ module Gemchan
             Board.find_each do |board|
                 @@boards[board[:upath]] = board[:id]
             end
+            @@configurations[:boards] = @@boards
+            self.update_conf
         end
 
         def self.createboard(params)

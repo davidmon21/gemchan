@@ -8,10 +8,14 @@ module Gemchan
     
         def authenticate!
             user = User.find_by_username(params['user']['username'])
-            if user.password == params['user']['password']
-                success!(user)
+            unless user == nil
+                if user.password == params['user']['password']
+                    success!(user)
+                else
+                    puts "here"
+                    throw(:warden, message: "The username and password combination ")
+                end
             else
-                puts "here"
                 throw(:warden, message: "The username and password combination ")
             end
         end
@@ -82,10 +86,22 @@ module Gemchan
             erb :admin
         end
 
+        get '/manage/:board' do
+            env['warden'].authenticate!
+            erb :adminboard
+        end
+
+        post '/delete' do
+            env['warden'].authenticate!
+            Gemchan::ChanController::delete_post(params)
+            redirect back
+        end
+
         post '/createboard' do
             env['warden'].authenticate!
             Gemchan::ChanController::createboard(params)
             Gemchan::ChanController::update_boards_dict
+            redirect back
         end
 
         post '/reply' do
