@@ -7,20 +7,13 @@ module Gemchan
         end
     
         def authenticate!
-          user = User.find_by_username(params['user']['username'])
-          puts user.username
-          puts user.password
-          if user.nil?
-            throw(:warden, message: "The username you entered does not exist.")
-          else 
-            puts user.password
+            user = User.find_by_username(params['user']['username'])
             if user.password == params['user']['password']
-                puts "success"
                 success!(user)
             else
+                puts "here"
                 throw(:warden, message: "The username and password combination ")
             end
-          end
         end
     end
     class Server < Sinatra::Base

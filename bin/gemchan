@@ -1,9 +1,33 @@
 #!/usr/bin/env ruby
 require 'gemchan'
-#Gemchan::ChanController::init "/Users/david/chandir"
-Gemchan::ChanController::init( )
-puts Gemchan::ChanController::configurations( ).inspect
-#Gemchan::Server.set :root, "/Users/david/chandir"
-puts Gemchan::Server.root
-Gemchan::Server.run!
+require 'optparse'
+
+#$home = Dir.home
+#Gemchan::ChanController::init( )
+#puts Gemchan::ChanController::configurations( ).inspect
+#Gemchan::Server.run!
 # ...
+
+def create(name, password)
+    user= Gemchan::User.create(username: name)
+    user.password= password
+    user.save!
+end
+
+options = { name: "admin", password: "password" }
+
+opts = OptionParser.new do |opts|
+    opts.banner = "Usage: #{$0} [options]"
+  
+    opts.on("-u", "--create-user user",
+            "user name") do |name|
+      options[:name] = name
+    end
+
+    opts.on("-p", "--password password",
+            "password") do |password|
+      options[:password] = password
+    end
+end
+create(options[:name], options[:password])
+

@@ -10,7 +10,7 @@ CREATE TABLE boards (
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT,
-    password TEXT,
+    password_hash BLOB,
     perms INTEGER
 );
 CREATE TABLE ops (
@@ -59,14 +59,17 @@ module Gemchan
     end
 
     class User < ActiveRecord::Base
+        include BCrypt
         validates_presence_of :username
-        validates_presence_of :password
-        def authenticate(attempted_password)
-            if self.password == attempted_password
-              true
-            else
-              false
-            end
+        validates_presence_of :password_hash
+
+        def password
+            @password ||= Password.new(password_hash)
+        end
+
+        def password=(new_password)
+            @password = Password.create(new_password)
+            self.password_hash = @password
         end
     end
 
