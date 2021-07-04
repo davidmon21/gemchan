@@ -50,7 +50,23 @@ module Gemchan
         end
         
         def self.delete_post(params)
-            puts params.inspect
+            for post in params["posts"]
+                post = Post.find(post.to_i)
+                if post.id == post.op_id
+                    posts = Post.where("op_id = #{post.id}")
+                    for post in posts
+                        post.delete
+                    end
+                    Op.find("post_id = #{post.id}").delete
+                else
+                    post.delete
+                end
+            end
+            if params["images"] != nil
+                for image in params["images"]
+                    puts image
+                end
+            end
         end
 
         def self._handle_file(tempfile, filename)

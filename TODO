@@ -13,3 +13,4 @@ tripcodes
 -change format of board upath in db
 -redirects in reply and create thread
 -move more logic into controller
+post limit

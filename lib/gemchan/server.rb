@@ -114,6 +114,11 @@ module Gemchan
             redirect back
         end
 
+        post '/delete' do
+            Gemchan::ChanController::delete_post(params)
+            redirect back
+        end
+
         get '/' do
             erb :index 
         end
