@@ -54,6 +54,7 @@ module Gemchan
     end
     
     class Op < ActiveRecord::Base
+        self.primary_key = :post_id
         validates_presence_of :post_id
         belongs_to :board
     end

@@ -1,8 +1,7 @@
 module Gemchan
     class ChanController
         @@boards = {}
-        @@root = "/var/www"
-        @@config_path = File.join(Dir.home, '.config', 'gemchan', 'config.yaml')
+        @@config_path = 'config.yaml'
         @@configurations = Object
         @@allowed_ftypes = ['png','jpeg','gif','webp']
 
@@ -11,7 +10,6 @@ module Gemchan
                 @@boards[board[:upath]] = board[:id]
             end
             @@configurations = YAML.load(File.read(@@config_path))
-            @@root = @@configurations[:root]
             @@configurations[:boards] = @@boards
             self.update_conf
         end
@@ -53,11 +51,13 @@ module Gemchan
             for post in params["posts"]
                 post = Post.find(post.to_i)
                 if post.id == post.op_id
+
+                    #op = Board.find(post.board_id).ops.find_by("post_id = #{post.op_id}")
+                    Op.find(post.id).delete
                     posts = Post.where("op_id = #{post.id}")
                     for post in posts
                         post.delete
                     end
-                    Op.find("post_id = #{post.id}").delete
                 else
                     post.delete
                 end
@@ -71,7 +71,7 @@ module Gemchan
 
         def self._handle_file(tempfile, filename)
             mtype = MimeMagic.by_magic(File.open(tempfile.path))
-            dirp = File.join( @@root, "public", "uploads")
+            dirp = File.join( "public", "uploads")
             unless @@allowed_ftypes.include? mtype.subtype
                 return nil
             end
@@ -89,11 +89,7 @@ module Gemchan
         end
 
         def self.boards_dict
-            return YAML.load(File.read(@@config_path))[:boards]
-        end
-
-        def self.root
-            return @@root
+            return @@boards
         end
 
         def self.update_boards_dict

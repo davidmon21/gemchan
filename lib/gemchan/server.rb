@@ -26,8 +26,6 @@ module Gemchan
             Gemchan::ChanController::init( )
         end
 
-        
-        set :root, ChanController::root
         enable :sessions
         set :session_secret, "supersecret"
 
@@ -88,7 +86,11 @@ module Gemchan
 
         get '/manage/:board' do
             env['warden'].authenticate!
-            erb :adminboard
+            if Gemchan::ChanController::boards_dict.has_key? '/'+params[:board]
+                erb :adminboard
+            else
+                erb :page_not_found
+            end
         end
 
         post '/delete' do
@@ -123,22 +125,26 @@ module Gemchan
             erb :index 
         end
         
-        Gemchan::ChanController::boards_dict.keys.each do |route|
-            get route do
-                @page_data = Gemchan::ChanController::board_page_data(route)
-                @route = route
-                erb :board
-            end
-
-            get route+'/:pid' do
-                @op = params[:pid]
-                @bid, @posts = Gemchan::ChanController::thread_page_data(@op, route)
-                erb :thread
+        get '/*/*/?' do |route, op|
+            if Gemchan::ChanController::boards_dict.has_key? '/'+route
+                if Op.exists?(post_id: op)
+                    @op = op
+                    @bid, @posts = Gemchan::ChanController::thread_page_data(@op, '/'+route)
+                    erb :thread
+                else 
+                    erb :page_not_found
+                end
             end
         end
 
-        
-
-       
+        get '/*/?' do |route|
+            if Gemchan::ChanController::boards_dict.has_key? '/'+route
+                @page_data = Gemchan::ChanController::board_page_data('/'+route)
+                @route = '/'+route
+                erb :board
+            else
+                erb :page_not_found
+            end
+        end
     end
 end

@@ -6,13 +6,14 @@ A friendly description of what it does.
 Install
 -------
 
-gem install gemchan
+gem install --user activerecord sinatra rmagick require warden bcrypt sinatra rmagick mimemagic rack
+./bin/gemchan --add-user -u admin
+
 
 Usage
 -----
 
-    require 'gemchan'
-    # Do fancy stuff
+    rackup
 
 Author
 ------
