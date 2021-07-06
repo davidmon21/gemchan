@@ -1,5 +1,5 @@
 ---
 :adapter: sqlite3
-:db: "gemchan.db"
+:db: gemchan.db
 :boards:
   "/b": 1

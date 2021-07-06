@@ -1,3 +1,4 @@
 gemchan-0.1.gem
 .gitignore
 gemchan.db
+public/uploads/*

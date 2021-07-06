@@ -1,16 +1,18 @@
+<img src=""></img>
+
+<h1> <%= @board_data[:upath] %> - <%= @board_data[:name] %> </h1>
 <form action="/create_op" enctype="multipart/form-data" method="POST">
     <input type="text-area" name="name" value="Anonymous" />
     <br>
     <input type="text-area" name="subject" />
     <br>
     <textarea name="content" rows="6" cols="50" />Post...</textarea>
-    <input type="hidden" name="board" value="<%= @page_data[:bid] %>" />
+    <input type="hidden" name="board" value="<%= @board_data[:id] %>" />
     <br>
     <input name="file" type="file" />
     <br>
     <input type="submit" name="submit" />
 </form>
-<% @page_data.delete(:bid) %>
 <% @page_data.each do |op, posts| %>
     <div id="op_post">
     <% op_post = Gemchan::Post.find(op) %>

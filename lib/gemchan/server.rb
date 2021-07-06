@@ -21,7 +21,7 @@ module Gemchan
         end
     end
     class Server < Sinatra::Base
-
+        set :root, Dir.pwd
         configure do
             Gemchan::ChanController::init( )
         end
@@ -139,7 +139,9 @@ module Gemchan
 
         get '/*/?' do |route|
             if Gemchan::ChanController::boards_dict.has_key? '/'+route
-                @page_data = Gemchan::ChanController::board_page_data('/'+route)
+                @board_data, @page_data = Gemchan::ChanController::board_page_data('/'+route)
+                puts @board_data.inspect
+                puts @page_data.inspect
                 @route = '/'+route
                 erb :board
             else

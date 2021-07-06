@@ -1,4 +1,4 @@
-require 'gemchan/version'
+require_relative 'gemchan/version.rb'
 
 module Gemchan
   require 'fileutils'
@@ -9,7 +9,7 @@ module Gemchan
   require 'rmagick'
   require 'mimemagic'
   require 'digest/md5'
-  require 'gemchan/controller.rb'
-  require 'gemchan/model.rb'
-  require 'gemchan/server.rb'
+  require_relative 'gemchan/controller.rb'
+  require_relative 'gemchan/model.rb'
+  require_relative 'gemchan/server.rb'
 end

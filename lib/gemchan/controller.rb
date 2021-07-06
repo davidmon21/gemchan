@@ -111,13 +111,17 @@ module Gemchan
 
         def self.board_page_data(route)
             page_data = {}
+            board_data = {}
             board = Board.find(@@boards[route])
-            page_data[:bid] = board.id
+            board_data[:id] = board.id
+            board_data[:upath] = board.upath
+            board_data[:name] = board.name
+            board_data[:description] = board.description
             ops = board.ops.sort_by(&:updated_at).reverse
             for op in ops
                 page_data[op.post_id] = board.posts.where("op_id = #{op.post_id}").last(4)
             end
-            return page_data
+            return board_data, page_data
         end
 
         def self.thread_page_data(thread, route)
