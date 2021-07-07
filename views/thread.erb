@@ -1,7 +1,7 @@
 <form action="/reply" enctype="multipart/form-data" method="POST">
-    <input type="text-area" name="name" value="Anonymous" />
+    <label> username: <input type="text-area" name="name" value="Anonymous" /> </label>
     <br>
-    <input type="text-area" name="subject" />
+    <label> subject: <input type="text-area" name="subject" /> </label>
     <br>
     <textarea name="content" rows="6" cols="50" />Post...</textarea>
     <input type="hidden" name="board" value=" <%= @bid %>" />
@@ -9,7 +9,7 @@
     <br>
     <input name="file" type="file" />
     <br>
-    <input type="submit" name="submit" />
+    <input type="submit" name="submit" value="respond" />
 </form>
 
 <% if @posts != nil then %>

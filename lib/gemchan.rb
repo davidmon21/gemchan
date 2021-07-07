@@ -9,6 +9,7 @@ module Gemchan
   require 'rmagick'
   require 'mimemagic'
   require 'digest/md5'
+  require 'securerandom'
   require_relative 'gemchan/controller.rb'
   require_relative 'gemchan/model.rb'
   require_relative 'gemchan/server.rb'

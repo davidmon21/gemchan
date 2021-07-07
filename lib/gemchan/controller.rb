@@ -124,6 +124,10 @@ module Gemchan
             return board_data, page_data
         end
 
+        def self.number_per_page
+            return @@configurations[:per_page].to_i
+        end
+
         def self.thread_page_data(thread, route)
             bid = Gemchan::ChanController::boards_dict[route]
             posts = Post.where("op_id = #{thread}").sort_by(&:created_at)

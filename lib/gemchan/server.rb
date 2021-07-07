@@ -27,7 +27,7 @@ module Gemchan
         end
 
         enable :sessions
-        set :session_secret, "supersecret"
+        set :session_secret, SecureRandom.hex(64)
 
         use Warden::Manager do |config|
             config.serialize_into_session{ |user| user.id }
@@ -124,7 +124,37 @@ module Gemchan
         get '/' do
             erb :index 
         end
-        
+
+        get '/*/page/*' do |route,pagenumber|
+            puts "matched"
+            puts route
+            puts pagenumber
+            pagenumber = pagenumber.to_i
+            if Gemchan::ChanController::boards_dict.has_key? '/'+route
+                unless pagenumber == 0
+                    start_page = (pagenumber*Gemchan::ChanController::number_per_page-1)*pagenumber
+                    end_page = start_page+Gemchan::ChanController::number_per_page
+                else
+                    startpage = 0
+                    end_page = Gemchan::ChanController::number_per_page
+                end
+                @board_data, page_data = Gemchan::ChanController::board_page_data('/'+route)
+                if page_data.size > end_page
+                    @more = true
+                end
+                squashme = page_data.keys[start_page..end_page]
+                unless squashme.nil?
+                    @page_data = page_data.slice(*squashme.flatten)
+                    @route = '/'+route
+                    erb :board
+                else
+                    erb :page_not_found
+                end
+            else
+                erb :page_not_found
+            end
+        end
+
         get '/*/*/?' do |route, op|
             if Gemchan::ChanController::boards_dict.has_key? '/'+route
                 if Op.exists?(post_id: op)
@@ -138,15 +168,8 @@ module Gemchan
         end
 
         get '/*/?' do |route|
-            if Gemchan::ChanController::boards_dict.has_key? '/'+route
-                @board_data, @page_data = Gemchan::ChanController::board_page_data('/'+route)
-                puts @board_data.inspect
-                puts @page_data.inspect
-                @route = '/'+route
-                erb :board
-            else
-                erb :page_not_found
-            end
+            redirect "/#{route}/page/0"
         end
+
     end
 end

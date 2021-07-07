@@ -1,5 +1,7 @@
 ---
 :adapter: sqlite3
 :db: gemchan.db
+:per_page: 10
 :boards:
   "/b": 1
+  "/a": 2
