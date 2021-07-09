@@ -1,21 +1,19 @@
 #!/usr/bin/env ruby
-require_relative '../lib/gemchan'
+require_relative '../lib/gemchan/controller'
+require_relative '../lib/gemchan/model'
 require 'optparse'
+require 'io/console'
+require 'yaml/store'
+@schema = 
 
-#$home = Dir.home
-#Gemchan::ChanController::init( )
-#puts Gemchan::ChanController::configurations( ).inspect
-#Gemchan::Server.run!
-# ...
-
-def create(name, password)
+def create(name)
     user= Gemchan::User.create(username: name)
-    user.password= password
+    user.password= STDIN.noecho(&:gets).chomp
     user.save!
 end
 
-options = { name: "admin", password: "password" }
-
+#options = { name: "admin", password: "password" }
+options = {:name => nil}
 opts = OptionParser.new do |opts|
     opts.banner = "Usage: #{$0} [options]"
   
@@ -23,11 +21,17 @@ opts = OptionParser.new do |opts|
             "user name") do |name|
       options[:name] = name
     end
-
-    opts.on("-p", "--password password",
-            "password") do |password|
-      options[:password] = password
+    opts.on("-i", "--install",
+            "Install setup") do |name|
+      options[:name] = name
     end
+end.parse!
+
+unless options[:name].nil?
+  create(name)
 end
+
+
+
 #create(options[:name], options[:password])
-puts Gemchan::ChanController::board_page_data('/b').inspect
+#puts Gemchan::ChanController::board_page_data('/b').inspect

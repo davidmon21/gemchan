@@ -1,5 +1,5 @@
 require 'sinatra'
-
+require 'securerandom'
 module Gemchan
     Warden::Strategies.add(:password) do
         def valid?

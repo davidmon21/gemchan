@@ -1,3 +1,4 @@
+require 'yaml'
 module Gemchan
     class ChanController
         @@boards = {}
