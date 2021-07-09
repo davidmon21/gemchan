@@ -1,16 +1,28 @@
+- = basically done
+~ = maybe done
+? = do?
+
 "install" in gemchan
 command line flags for gemchan
+
 admin post
 visual elements like styles and banners
-delete elements(post) if admin session
 tripcodes
+post limit thread
+thread limit board
+
+?delete elements(post) if admin session
 ~manage page
+
+~init and controller seperation where needed
+
+-pagination
 -routes - finish up
 -mime check files - thumbnail generation
--init and controller seperation where needed
 -admin session
 -names, subject db
 -change format of board upath in db
 -redirects in reply and create thread
 -move more logic into controller
-post limit
+
+

@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require 'gemchan'
+require_relative '../lib/gemchan'
 require 'optparse'
 
 #$home = Dir.home
@@ -29,5 +29,5 @@ opts = OptionParser.new do |opts|
       options[:password] = password
     end
 end
-create(options[:name], options[:password])
-
+#create(options[:name], options[:password])
+puts Gemchan::ChanController::board_page_data('/b').inspect
