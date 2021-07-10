@@ -8,7 +8,7 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 gem "sinatra"
 gem "warden"
-gem "active_record"
+gem "activerecord"
 gem "bcrypt"
 gem "rmagick"
 gem "mimemagic"
