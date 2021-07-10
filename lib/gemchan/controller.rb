@@ -12,6 +12,7 @@ module Gemchan
             end
             @@configurations = YAML.load(File.read(@@config_path))
             @@configurations[:boards] = @@boards
+            @@allowed_ftypes = @@configurations[:allowed_ftypes]
             self.update_conf
         end
 

@@ -32,4 +32,5 @@ CREATE TABLE posts (
     FOREIGN KEY (board_id)
        REFERENCES boards (id)
 );
-.quit
+.exit
+

@@ -6,13 +6,14 @@
     <br>
     <label> subject: <input type="text-area" name="subject" /> </label>
     <br>
-    <textarea name="content" rows="6" cols="50" />Post...</textarea>
+    <textarea name="content" rows="6" cols="50" maxlength=<%=Gemchan::ChanController::configurations[:max_post_size]%> />Post...</textarea>
     <input type="hidden" name="board" value="<%= @board_data[:id] %>" />
     <br>
     <input name="file" type="file" />
     <br>
     <input type="submit" name="submit" value="New OP" />
 </form>
+
 <% @page_data.each do |op, posts| %>
     <div id="op_post">
     <% op_post = Gemchan::Post.find(op) %>

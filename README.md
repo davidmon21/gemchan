@@ -5,9 +5,13 @@ A friendly description of what it does.
 
 Install
 -------
-
-gem install --user activerecord sinatra rmagick require warden bcrypt sinatra rmagick mimemagic rack
-./bin/gemchan --add-user -u admin
+```
+bundle install
+ruby ./install.rb
+./bin/gemchan -u admin
+```
+Now you can create boards by going to /manage and logging in as admin - happy posting
+Note: your install path should be the same directory as this project, this project is also not setup to use RVM at the moment
 
 
 Usage

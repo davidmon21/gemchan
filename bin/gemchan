@@ -4,10 +4,11 @@ require_relative '../lib/gemchan/model'
 require 'optparse'
 require 'io/console'
 require 'yaml/store'
-@schema = 
 
 def create(name)
     user= Gemchan::User.create(username: name)
+    STDOUT.print "Enter new users password(noecho): " 
+    STDOUT.flush
     user.password= STDIN.noecho(&:gets).chomp
     user.save!
 end
@@ -28,10 +29,6 @@ opts = OptionParser.new do |opts|
 end.parse!
 
 unless options[:name].nil?
-  create(name)
+  create(options[:name])
 end
 
-
-
-#create(options[:name], options[:password])
-#puts Gemchan::ChanController::board_page_data('/b').inspect
