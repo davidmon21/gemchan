@@ -24,6 +24,8 @@ GEM
       ruby2_keywords (~> 0.0.1)
     nokogiri (1.11.7-arm64-darwin)
       racc (~> 1.4)
+    nokogiri (1.11.7-x86_64-linux)
+      racc (~> 1.4)
     racc (1.5.2)
     rack (2.2.3)
     rack-protection (2.1.0)
@@ -36,23 +38,29 @@ GEM
       rack (~> 2.2)
       rack-protection (= 2.1.0)
       tilt (~> 2.0)
+    sqlite3 (1.4.2)
     tilt (2.0.10)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     warden (1.2.9)
       rack (>= 2.0.9)
+    webrick (1.7.0)
     zeitwerk (2.4.2)
 
 PLATFORMS
   arm64-darwin-20
+  x86_64-linux
 
 DEPENDENCIES
   activerecord
   bcrypt
   mimemagic
+  rack
   rmagick
   sinatra
+  sqlite3
   warden
+  webrick
 
 BUNDLED WITH
    2.2.20
