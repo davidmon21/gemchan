@@ -7,3 +7,5 @@
 :max_post_size: 2500
 :boards:
   "/b": 1
+  "/drr": 2
+  "/a": 3

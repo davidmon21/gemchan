@@ -25,9 +25,12 @@ module Gemchan
         configure do
             Gemchan::ChanController::init( )
         end
-
+        session_key = SecureRandom.hex(64)
         enable :sessions
-        set :session_secret, SecureRandom.hex(64)
+        set :session_secret, session_key
+        use Rack::Session::Cookie, :key => 'rack.session',
+                           :path => '/',
+                           :secret => session_key
 
         use Warden::Manager do |config|
             config.serialize_into_session{ |user| user.id }

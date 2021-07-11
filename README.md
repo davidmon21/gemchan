@@ -2,6 +2,7 @@ Gemchan
 ========
 
 A friendly description of what it does.
+instance ran at: https://chan.xmanifesto.club
 
 Install
 -------
