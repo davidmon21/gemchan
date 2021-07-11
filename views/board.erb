@@ -2,6 +2,7 @@
 <%= erb :header %>
 <%= erb :postbox %>
 
+<div id="main">
 <% @page_data.each do |op, posts| %>
     <div id="op_post">
     <% op_post = Gemchan::Post.find(op) %>
@@ -45,3 +46,4 @@
 <% end %>
 <% end %>
 <% end %>
+</div>

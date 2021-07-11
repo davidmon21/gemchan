@@ -1,5 +1,5 @@
 <nav>
-<div id="board-links"
+<div id="board-links">
 <% Gemchan::Board.find_each do |board| %>
     <div id="link">
     <a href="<%= board[:upath] %>"><%= board[:name] %></a>

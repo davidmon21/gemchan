@@ -1,7 +1,7 @@
 <%= erb :nav %>
 <%= erb :header %>
 <%= erb :postbox %>
-
+<div id="main">
 <% if @posts != nil then %>
 <% @posts.each do |post| %>
     <div id="post">
@@ -21,3 +21,4 @@
     <br>
 <% end %>
 <% end %>
+</div>

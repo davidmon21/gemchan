@@ -1,11 +1,30 @@
-<h1> Admin Panel </h1>
-<h2> Add Board </h2>
-<form action="/createboard" method="POST">
-    <label>Path: <input type="text-area" name="upath" /> </label>
+<%= erb :nav %>
+<%= erb :header %>
+<%= erb :postbox %>
+<div id="main">
+<%= erb :boardform %>
+<% posts = Gemchan::Post.all %>
+<% if posts != nil then %>
+<form action="/delete" method="POST"> 
+<% posts.each do |post| %>
+    <div id="post">
+        <div id="info">
+            <input type="checkbox" name="posts[]" name="<%= post[:id] %>" value="<%= post[:id] %>" /> <a href="#<%= post[:id] %>"><%= post[:id] %></a> <%= post[:created_at] %>
+        </div>
+        <% if post.media != nil %>
+        <div id="media">
+            <% imgpiece = post.media.split('.') %>
+            <a href='<%= post.media %>'><img src="<%= imgpiece[0]+'.thumb.'+imgpiece[1] %>"/></a>
+            <input type="checkbox" name="images[]" value="<%= post.media %>" />
+        </div>
+        <% end %>
+        <div id="content">
+            <%= post[:content] %>
+        </div>
+    </div>
     <br>
-    <label>Name: <input type="text-area" name="name" /></label>
-    <br>
-    <label>Description: <input type="text-area" name="description" /> </label>
-    <br>
-    <input type="submit" name="submit" />
+<% end %>
+<button type="submit">DELETE</button>
 </form>
+<% end %>
+</div>

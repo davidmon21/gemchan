@@ -1,5 +1,5 @@
 require 'yaml/store'
-dbtyp = "sqlite3"
+dbtype = "sqlite3"
 dbname = "gemchan.db"
 allowed_ftypes = ['png','jpeg','gif','webp']
 install_path = Dir.pwd
@@ -50,6 +50,7 @@ new_config.transaction do
     new_config[:per_page] = per_page
     new_config[:max_post_size] = max_post_size
     new_config[:allowed_ftypes] = allowed_ftypes
+    new_config[:about] = "set your about yo"
 end
 
 
