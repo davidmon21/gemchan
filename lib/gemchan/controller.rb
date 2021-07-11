@@ -40,7 +40,11 @@ module Gemchan
             
             unless is_op
                 op_post = board.ops.where("post_id = #{params[:op]}")
-                op_post.touch_all
+                begin
+                    op_post.touch_all
+                rescue
+                    op_post.each(&:touch)
+                end
                 post.op_id = params[:op]
             else
                 op_post = board.ops.create(post_id: post[:id])
