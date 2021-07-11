@@ -2,3 +2,8 @@ gemchan-0.1.gem
 .gitignore
 public/uploads/.DS_Store
 .gitignore
+config.yaml
+Gemfile.lock
+Procfile
+gemchan.db
+
