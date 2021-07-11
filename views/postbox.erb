@@ -1,0 +1,18 @@
+
+<form action="<%= @action_url %>" enctype="multipart/form-data" method="POST">
+    <label> username: <input type="text-area" name="name" value="Anonymous" /> </label>
+    <br>
+    <label> email: <input type="text-area" name="email" value="Anonymous" /> </label>
+    <br>
+    <label> subject: <input type="text-area" name="subject" /> </label>
+    <br>
+    <textarea name="content" rows="6" cols="50" maxlength=<%=Gemchan::ChanController::configurations[:max_post_size]%> />Post...</textarea>
+    <input type="hidden" name="board" value=" <%= @board_id %>" />
+    <% if @is_thread %>
+        <input type="hidden" name="op" value="<%= @op_id %>" />
+    <% end %>
+    <br>
+    <input name="file" type="file" />
+    <br>
+    <input type="submit" name="submit" value="Post" />
+</form>

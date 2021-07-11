@@ -1,18 +1,6 @@
-<img src=""></img>
-
-<h1> <%= @board_data[:upath] %> - <%= @board_data[:name] %> </h1>
-<form action="/create_op" enctype="multipart/form-data" method="POST">
-    <label> username: <input type="text-area" name="name" value="Anonymous" /> </label>
-    <br>
-    <label> subject: <input type="text-area" name="subject" /> </label>
-    <br>
-    <textarea name="content" rows="6" cols="50" maxlength=<%=Gemchan::ChanController::configurations[:max_post_size]%> />Post...</textarea>
-    <input type="hidden" name="board" value="<%= @board_data[:id] %>" />
-    <br>
-    <input name="file" type="file" />
-    <br>
-    <input type="submit" name="submit" value="New OP" />
-</form>
+<%= erb :nav %>
+<%= erb :header %>
+<%= erb :postbox %>
 
 <% @page_data.each do |op, posts| %>
     <div id="op_post">

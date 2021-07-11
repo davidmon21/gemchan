@@ -139,6 +139,9 @@ module Gemchan
                     end_page = Gemchan::ChanController::number_per_page
                 end
                 @board_data, page_data = Gemchan::ChanController::board_page_data('/'+route)
+                @board_id = @board_data[:id]
+                @action_url = "/create_op"
+                @is_thread = false
                 if page_data.size > end_page
                     @more = true
                 end
@@ -158,8 +161,10 @@ module Gemchan
         get '/*/*/?' do |route, op|
             if Gemchan::ChanController::boards_dict.has_key? '/'+route
                 if Op.exists?(post_id: op)
-                    @op = op
-                    @bid, @posts = Gemchan::ChanController::thread_page_data(@op, '/'+route)
+                    @op_id = op
+                    @board_id, @posts = Gemchan::ChanController::thread_page_data(@op_id, '/'+route)
+                    @is_thread = true
+                    @action_url = "/reply"
                     erb :thread
                 else 
                     erb :page_not_found
