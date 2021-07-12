@@ -51,6 +51,9 @@ module Gemchan
               env[key]['_method'] = 'post' if key == 'rack.request.form_hash'
             end
         end
+        get '/style.scss' do
+            scss :style
+        end
 
         get '/auth/login' do
             erb :login
