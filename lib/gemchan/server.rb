@@ -112,6 +112,12 @@ module Gemchan
             redirect back
         end
 
+        post '/admin_post' do
+            env['warden'].authenticate!
+            Gemchan::ChanController::create_admin_post(params)
+            redirect back
+        end
+
         post '/reply' do
             Gemchan::ChanController::create_post(params)
             redirect back

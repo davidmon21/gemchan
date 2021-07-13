@@ -32,5 +32,13 @@ CREATE TABLE posts (
     FOREIGN KEY (board_id)
        REFERENCES boards (id)
 );
+CREATE TABLE newsposts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    subject TEXT,
+    name TEXT,
+    content TEXT,
+    media TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 .exit
 
