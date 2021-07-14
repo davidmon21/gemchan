@@ -123,6 +123,17 @@ module Gemchan
             redirect back
         end
 
+        post '/report_post' do
+            Gemchan::ChanController::report_post(params)
+            redirect back
+        end
+
+        post '/create_news' do
+            env['warden'].authenticate!
+            Gemchan::ChanController::news_post(params)
+            redirect back
+        end
+
         post '/create_op' do
             Gemchan::ChanController::create_post(params, is_op=true)
             redirect back

@@ -8,8 +8,12 @@
 admin post
 visual elements like styles and banners
 tripcodes
-post limit thread
-thread limit board
+
+
+-post limit thread
+-thread limit board
+
+report post
 
 ?delete elements(post) if admin session
 ~manage page

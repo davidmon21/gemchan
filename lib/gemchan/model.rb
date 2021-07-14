@@ -41,4 +41,12 @@ module Gemchan
         end
     end
 
+    class Newspost < ActiveRecord::Base
+        validates_presence_of :content
+    end
+
+    class Report < ActiveRecord::Base
+        validates_presence_of :reported_post
+    end
+
 end

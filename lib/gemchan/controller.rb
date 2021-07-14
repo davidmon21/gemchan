@@ -40,18 +40,21 @@ module Gemchan
             
             unless is_op
                 op_post = board.ops.where("post_id = #{params[:op]}")
-                unless op_post.number_posts >= self.configurations[:thread_size]
+                unless op_post[0].number_posts >= self.configurations[:thread_size].to_i
                     begin
                         op_post.touch_all
                     rescue
                         op_post.each(&:touch)
                     end
+                    op_post[0].number_posts+=1
+                    op_post[0].save
                 end
-                op_post.number_posts+=1
                 post.op_id = params[:op]
             else
-                op_post = board.ops.create(post_id: post[:id])
-                op_post.number_posts = 1
+                if board.ops.count >= self.configurations[:board_size].to_i
+                    self.delete_post({"posts" => [ board.ops.sort_by(&:updated_at).first.id ], "images" => []})
+                end
+                op_post = board.ops.create(post_id: post[:id], number_posts: 1)
                 post.op_id = post.id
             end
             post.save
@@ -77,6 +80,14 @@ module Gemchan
                     puts image
                 end
             end
+        end
+
+        def self.report_post(params)
+            Report.create(reported_post: params[:post_id], content: params[:content])
+        end
+
+        def self.create_news(params)
+            Newspost.create(name: params[:name], subject: params[:subject], content: params[:content])
         end
 
         def self._handle_file(tempfile, filename)
