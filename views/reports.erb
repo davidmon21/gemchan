@@ -1,25 +1,23 @@
-<%= erb :head %>
-<%= erb :nav %>
-<%= erb :header %>
-<div id="main">
-<%= erb :about %>
-<% if @news_posts != nil then %>
-<% @news_posts.each do |post| %>
+<% reports = Gemchan::Report.all %>
+<% if reports != nil then %> 
+<% reports.each do |report| %>
+    <% post = Gemchan::Post.find(report.reported_post) %>
     <div id="post">
         <div id="info">
-            <%= post[:created_at] %>
+            <a href="#<%= post[:id] %>"><%= post[:id] %></a> <%= post[:created_at] %>
         </div>
         <% if post.media != nil %>
         <div id="media">
             <% imgpiece = post.media.split('.') %>
             <a href='<%= post.media %>'><img src="<%= imgpiece[0]+'.thumb.'+imgpiece[1] %>"/></a>
+            <input type="checkbox" name="images[]" value="<%= post.media %>" />
         </div>
         <% end %>
         <div id="content">
             <%= post[:content] %>
+            <p class="important"><%= report.content %></p>
         </div>
     </div>
     <br>
 <% end %>
 <% end %>
-</div>

@@ -83,11 +83,18 @@ module Gemchan
         end
 
         def self.report_post(params)
-            Report.create(reported_post: params[:post_id], content: params[:content])
+            for post in params["posts"]
+                Report.create(reported_post: post.to_i, content: params[:content])
+            end
         end
 
         def self.create_news(params)
-            Newspost.create(name: params[:name], subject: params[:subject], content: params[:content])
+            if params[:file] == nil
+                filepath = nil
+            else
+                filepath = self._handle_file(params[:file][:tempfile],params[:file][:filename])
+            end
+            Newspost.create(name: params[:name], subject: params[:subject], content: params[:content], media: filepath)
         end
 
         def self._handle_file(tempfile, filename)

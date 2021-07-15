@@ -4,11 +4,12 @@
 <%= erb :header %>
 <%= erb :postbox %>
 <div id="main">
+<form action="/report_post" method="POST">
 <% if @posts != nil then %>
 <% @posts.each do |post| %>
     <div id="post">
         <div id="info">
-            <a href="#<%= post[:id] %>"><%= post[:id] %></a> <%= post[:created_at] %>
+           <input type="checkbox" name="posts[]" name="<%= post[:id] %>" value="<%= post[:id] %>" /> <a href="#<%= post[:id] %>"><%= post[:id] %></a> <%= post[:created_at] %>
         </div>
         <% if post.media != nil %>
         <div id="media">
@@ -23,4 +24,7 @@
     <br>
 <% end %>
 <% end %>
+<input type="text-area" name="content" value="Report Reasoning" />
+<button type="submit">Report</button>
+</form>
 </div>

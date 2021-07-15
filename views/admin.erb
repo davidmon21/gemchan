@@ -1,30 +1,8 @@
+<%= erb :head %>
 <%= erb :nav %>
 <%= erb :header %>
 <%= erb :postbox %>
 <div id="main">
 <%= erb :boardform %>
-<% posts = Gemchan::Post.all %>
-<% if posts != nil then %>
-<form action="/delete" method="POST"> 
-<% posts.each do |post| %>
-    <div id="post">
-        <div id="info">
-            <input type="checkbox" name="posts[]" name="<%= post[:id] %>" value="<%= post[:id] %>" /> <a href="#<%= post[:id] %>"><%= post[:id] %></a> <%= post[:created_at] %>
-        </div>
-        <% if post.media != nil %>
-        <div id="media">
-            <% imgpiece = post.media.split('.') %>
-            <a href='<%= post.media %>'><img src="<%= imgpiece[0]+'.thumb.'+imgpiece[1] %>"/></a>
-            <input type="checkbox" name="images[]" value="<%= post.media %>" />
-        </div>
-        <% end %>
-        <div id="content">
-            <%= post[:content] %>
-        </div>
-    </div>
-    <br>
-<% end %>
-<button type="submit">DELETE</button>
-</form>
-<% end %>
+<%= erb :reports %>
 </div>

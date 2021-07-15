@@ -5,7 +5,7 @@
 ~"install" in gemchan
 ~command line flags for gemchan
 
-admin post
+- admin post
 visual elements like styles and banners
 tripcodes
 
@@ -13,7 +13,7 @@ tripcodes
 -post limit thread
 -thread limit board
 
-report post
+~report post
 
 ?delete elements(post) if admin session
 ~manage page

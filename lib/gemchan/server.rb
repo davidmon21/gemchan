@@ -87,6 +87,8 @@ module Gemchan
 
         get '/manage' do
             env['warden'].authenticate!
+            @is_news = true
+            @action_url = "/create_news"
             erb :admin
         end
 
@@ -130,7 +132,7 @@ module Gemchan
 
         post '/create_news' do
             env['warden'].authenticate!
-            Gemchan::ChanController::news_post(params)
+            Gemchan::ChanController::create_news(params)
             redirect back
         end
 
@@ -145,6 +147,7 @@ module Gemchan
         end
 
         get '/' do
+            @news_posts = Newspost.all.sort_by(&:created_at).reverse
             erb :index 
         end
 
@@ -153,6 +156,7 @@ module Gemchan
             puts route
             puts pagenumber
             pagenumber = pagenumber.to_i
+            @is_news = false
             if Gemchan::ChanController::boards_dict.has_key? '/'+route
                 unless pagenumber == 0
                     start_page = (pagenumber*Gemchan::ChanController::number_per_page-1)*pagenumber
@@ -188,6 +192,7 @@ module Gemchan
                     @board_id, @posts = Gemchan::ChanController::thread_page_data(@op_id, '/'+route)
                     @is_thread = true
                     @action_url = "/reply"
+                    @is_news = false
                     erb :thread
                 else 
                     erb :page_not_found
