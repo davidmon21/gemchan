@@ -5,9 +5,10 @@
 <%= erb :postbox %>
 <div id="main">
 <form action="/report_post" method="POST">
+<% divid = "op_post" %>
 <% if @posts != nil then %>
 <% @posts.each do |post| %>
-    <div id="post">
+    <div id="<%= divid %>">
         <div id="info">
            <input type="checkbox" name="posts[]" name="<%= post[:id] %>" value="<%= post[:id] %>" /> <a href="#<%= post[:id] %>"><%= post[:id] %></a> <%= post[:created_at] %>
         </div>
@@ -22,6 +23,7 @@
         </div>
     </div>
     <br>
+    <% divid = "post" %>
 <% end %>
 <% end %>
 <input type="text-area" name="content" value="Report Reasoning" />

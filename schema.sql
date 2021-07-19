@@ -24,6 +24,7 @@ CREATE TABLE posts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     subject TEXT,
     name TEXT,
+    email TEXT,
     content TEXT,
     media TEXT,
     op_id      INTEGER,

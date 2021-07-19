@@ -36,11 +36,11 @@ module Gemchan
                 filepath = self._handle_file(params[:file][:tempfile],params[:file][:filename])
             end
 
-            post = board.posts.create(name: params[:name], subject: params[:subject], content: params[:content], media: filepath)
+            post = board.posts.create(name: params[:name], email: params[:email], subject: params[:subject], content: params[:content], media: filepath)
             
             unless is_op
                 op_post = board.ops.where("post_id = #{params[:op]}")
-                unless op_post[0].number_posts >= self.configurations[:thread_size].to_i
+                unless (op_post[0].number_posts >= self.configurations[:thread_size].to_i) or params[:email].downcase.chomp == "sage"
                     begin
                         op_post.touch_all
                     rescue
@@ -61,17 +61,18 @@ module Gemchan
         end
         
         def self.delete_post(params)
+            deleted = []
             for post in params["posts"]
                 post = Post.find(post.to_i)
                 if post.id == post.op_id
-
                     #op = Board.find(post.board_id).ops.find_by("post_id = #{post.op_id}")
                     Op.find(post.id).delete
                     posts = Post.where("op_id = #{post.id}")
                     for post in posts
+                        deleted.append(post.id)
                         post.delete
                     end
-                else
+                elsif deleted.exclude? post.id
                     post.delete
                 end
             end

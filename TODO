@@ -6,7 +6,7 @@
 ~command line flags for gemchan
 
 - admin post
-visual elements like styles and banners
+~ not really done ~ visual elements like styles and banners
 tripcodes
 
 
@@ -19,7 +19,7 @@ tripcodes
 ~manage page
 
 ~init and controller seperation where needed
-
+-sage
 -pagination
 -routes - finish up
 -mime check files - thumbnail generation
