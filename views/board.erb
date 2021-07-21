@@ -48,3 +48,7 @@
 <% end %>
 <% end %>
 </div>
+<% if @pagenumber >= 1 %>
+<a href="<%= @route %>/page/<%= @pagenumber+1 %>">Prev Page</a> 
+<% end %> 
+<a href="<%= @route %>/page/<%= @pagenumber+1 %>">Next Page</a>

@@ -156,6 +156,7 @@ module Gemchan
             puts route
             puts pagenumber
             pagenumber = pagenumber.to_i
+            @pagenumber = pagenumber
             @is_news = false
             if Gemchan::ChanController::boards_dict.has_key? '/'+route
                 unless pagenumber == 0
