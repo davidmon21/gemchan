@@ -2,23 +2,18 @@
 ~ = maybe done
 ? = do?
 
+tripcodes
+session based spam management(thanks spammer)
+~manage page
+~init and controller seperation where needed
+~report post
+~ not really done ~ visual elements like styles and banners
 ~"install" in gemchan
 ~command line flags for gemchan
-
+?delete elements(post) if admin session
 - admin post
-~ not really done ~ visual elements like styles and banners
-tripcodes
-
-
 -post limit thread
 -thread limit board
-
-~report post
-
-?delete elements(post) if admin session
-~manage page
-
-~init and controller seperation where needed
 -sage
 -pagination
 -routes - finish up
@@ -28,5 +23,6 @@ tripcodes
 -change format of board upath in db
 -redirects in reply and create thread
 -move more logic into controller
+
 
 
