@@ -1,5 +1,7 @@
 require 'sinatra'
 require 'securerandom'
+require 'rack/attack'
+require 'rack-protection'
 module Gemchan
     Warden::Strategies.add(:password) do
         def valid?
@@ -28,10 +30,17 @@ module Gemchan
         session_key = SecureRandom.hex(64)
         enable :sessions
         set :session_secret, session_key
+        Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
         use Rack::Session::Cookie, :key => 'rack.session',
                            :path => '/',
                            :secret => session_key
-
+        use Rack::Protection
+        use Rack::Attack
+        Rack::Attack.throttle("requests by ip", limit: 4, period: 1) do |request|
+            if request.path == "/reply" || request.path == "/create_op"
+                request.ip
+            end
+        end
         use Warden::Manager do |config|
             config.serialize_into_session{ |user| user.id }
             config.serialize_from_session{ |id| User.find(id) }

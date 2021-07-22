@@ -2,7 +2,7 @@ require 'yaml'
 module Gemchan
     class ChanController
         @@boards = {}
-        @@config_path = 'config.yaml'
+        @@config_path = './config.yaml'
         @@configurations = Object
         @@allowed_ftypes = ['png','jpeg','gif','webp']
 
