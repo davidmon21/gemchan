@@ -30,12 +30,12 @@ module Gemchan
         session_key = SecureRandom.hex(64)
         enable :sessions
         set :session_secret, session_key
+        use Rack::Protection
+        use Rack::Attack
         Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
         use Rack::Session::Cookie, :key => 'rack.session',
                            :path => '/',
                            :secret => session_key
-        use Rack::Protection
-        use Rack::Attack
         Rack::Attack.throttle("requests by ip", limit: 4, period: 1) do |request|
             if request.path == "/reply" || request.path == "/create_op"
                 request.ip
