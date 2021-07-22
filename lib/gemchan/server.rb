@@ -36,8 +36,13 @@ module Gemchan
         use Rack::Session::Cookie, :key => 'rack.session',
                            :path => '/',
                            :secret => session_key
+        Rack::Attack.safelist('allow from localhost') do |req|
+                            # Requests are allowed if the return value is truthy
+            '127.0.0.1' == req.ip || '::1' == req.ip
+        end
         Rack::Attack.throttle("requests by ip", limit: 4, period: 1) do |request|
             if request.path == "/reply" || request.path == "/create_op"
+                puts request.ip
                 request.ip
             end
         end
