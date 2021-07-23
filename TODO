@@ -3,7 +3,11 @@
 ? = do?
 
 tripcodes
-session based spam management(thanks spammer)
+improved ui themeing
+additional file types
+~session based spam management(thanks spammer)
+    improve: add alert popups, make rate adjustable, more improvements
+
 ~manage page
 ~init and controller seperation where needed
 ~report post
@@ -24,5 +28,5 @@ session based spam management(thanks spammer)
 -redirects in reply and create thread
 -move more logic into controller
 
-a change
+
 
