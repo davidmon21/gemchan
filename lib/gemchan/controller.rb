@@ -148,9 +148,18 @@ module Gemchan
             board_data[:description] = board.description
             ops = board.ops.sort_by(&:updated_at).reverse
             for op in ops
-                page_data[op.post_id] = board.posts.where("op_id = #{op.post_id}").last(4)
+                page_data[op.post_id] = board.posts.where("op_id = #{op.post_id}").last(self.configurations[:preview_length])
             end
             return board_data, page_data
+        end
+
+        def self.linkify_content(content)
+            return content.gsub(/\>\>([0-9]+)/) do |pid| 
+                pid = pid.delete(">")
+                the_post = Post.find(pid.to_i)
+                board_path = Board.find(the_post[:board_id])[:upath]
+                "<a href='#{board_path}/#{the_post[:op_id]}##{pid}'>&gt;&gt;#{pid}</a>"
+            end
         end
 
         def self.number_per_page

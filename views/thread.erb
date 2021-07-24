@@ -19,7 +19,7 @@
         </div>
         <% end %>
         <div id="content">
-            <%= post[:content] %>
+            <%= Gemchan::ChanController.linkify_content(post[:content]) %>
         </div>
     </div>
     <br>
