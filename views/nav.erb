@@ -1,7 +1,9 @@
 <nav id="navbar">
+<ul>
 <% Gemchan::Board.find_each do |board| %>
-    <div id="link">
+    <li>
     <a href="<%= board[:upath] %>"><%= board[:name] %></a>
-    </div>
+    </li>
 <% end %>
+</ul>
 </nav>
