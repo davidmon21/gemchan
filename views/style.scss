@@ -2,6 +2,38 @@ html, body {
 	background: #c7d3fa;
 	color: #800000;
 }
+
+nav ul {
+  margin: 0px;
+  font-size: 2vh;
+  padding: 1vw 0vw 1vw 1vw;
+}
+nav li {
+  margin-right: 20px;
+  font-size: 2vh;
+  display: inline;
+}
+#navbar {
+  position: fixed;
+  width: 100%;
+  top: 0px;
+  left: 0px;
+  color: #999999;
+  background-color: #9E0D0D;
+  background: rgb(190, 193, 277);
+  border-radius: 1vw;
+  font-size: 2vh;
+}
+
+#forms {
+  margin-right: auto;
+  margin-left: auto;
+  td {
+  justify-content: center;
+  }
+  padding-top: 4vh;
+}
+
 #op_post {
   background-color: rgb(205, 209, 236);
   box-shadow: 2px, 2px, rgba(0,0,0,.5);
@@ -23,14 +55,6 @@ html, body {
   padding-left: 10px;
   padding-right: 10px;
 } 
-
-#board-links {
-  background: rgb(190, 193, 277);
-	color: #999999;
-}
-#forms{
-  width: 25%;
-}
 
 .important {
   color: red;

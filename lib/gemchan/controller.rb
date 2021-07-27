@@ -156,9 +156,13 @@ module Gemchan
         def self.linkify_content(content)
             return content.gsub(/\>\>([0-9]+)/) do |pid| 
                 pid = pid.delete(">")
-                the_post = Post.find(pid.to_i)
-                board_path = Board.find(the_post[:board_id])[:upath]
-                "<a href='#{board_path}/#{the_post[:op_id]}##{pid}'>&gt;&gt;#{pid}</a>"
+                begin
+                    the_post = Post.find(pid.to_i)
+                    board_path = Board.find(the_post[:board_id])[:upath]
+                    "<a href='#{board_path}/#{the_post[:op_id]}##{pid}'>&gt;&gt;#{pid}</a>"
+                rescue
+                    "<a href='##{pid}'>&gt;&gt;#{pid}</a>"
+                end
             end
         end
 
