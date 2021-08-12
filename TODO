@@ -2,7 +2,12 @@
 ~ = maybe done
 ? = do?
 
+
+
 tripcodes
+add 8chan/9chan Like functionality
+\Look into activity pub
+CREATE activity pub client/server outside of this - if we can add ETC hmph
 improved ui themeing
 additional file types
 ~session based spam management(thanks spammer)

@@ -89,6 +89,11 @@ module Gemchan
             end
         end
 
+        def self.generate_trip(plain)
+            salt = plain+"H."[1..2].tr_s(':;<=>?@\^_`',"ABCDEFGabcdef")
+            plain.crypt(salt[1..2])[3..-1]
+        end
+
         def self.create_news(params)
             if params[:file] == nil
                 filepath = nil
