@@ -2,7 +2,11 @@ require 'sinatra'
 require 'securerandom'
 require 'rack/attack'
 require 'rack-protection'
+require 'recaptcha'
+
 module Gemchan
+    
+    
     Warden::Strategies.add(:password) do
         def valid?
           params['user'] && params['user']['username'] && params['user']['password']
@@ -37,7 +41,7 @@ module Gemchan
                            :path => '/',
                            :secret => session_key
         Rack::Attack.safelist('allow from localhost') do |req|
-                            # Requests are allowed if the return value is truthy
+            # Requests are allowed if the return value is truthy
             '127.0.0.1' == req.ip || '::1' == req.ip
         end
         Rack::Attack.throttle("requests by ip", limit: 4, period: 1) do |request|
@@ -46,6 +50,14 @@ module Gemchan
                 request.ip
             end
         end
+        if Gemchan::ChanController.configurations[:recaptcha] == true
+            Recaptcha.configure do |config|
+                config.site_key = Gemchan::ChanController.configurations[:recaptcha_site_key]
+                config.secret_key = Gemchan::ChanController.configurations[:recaptcha_secret_key]
+            end
+        end
+        include Recaptcha::Adapters::ControllerMethods
+        include Recaptcha::Adapters::ViewMethods
         use Warden::Manager do |config|
             config.serialize_into_session{ |user| user.id }
             config.serialize_from_session{ |id| User.find(id) }
@@ -135,6 +147,13 @@ module Gemchan
         end
 
         post '/reply' do
+            puts params.inspect
+            if Gemchan::ChanController.configurations[:recaptcha] == true
+                puts verify_recaptcha
+                unless verify_recaptcha
+                    redirect back
+                end
+            end
             Gemchan::ChanController::create_post(params)
             redirect back
         end
@@ -151,6 +170,14 @@ module Gemchan
         end
 
         post '/create_op' do
+            puts params.inspect
+            if Gemchan::ChanController.configurations[:recaptcha] == true
+                puts verify_recaptcha
+                if verify_recaptcha
+                    puts "YES"
+                    redirect back
+                end
+            end
             Gemchan::ChanController::create_post(params, is_op=true)
             redirect back
         end
@@ -159,6 +186,22 @@ module Gemchan
             Gemchan::ChanController::delete_post(params)
             redirect back
         end
+        get '/testcaptcha' do
+            <<-HTML
+              <form action="/verify">
+                #{recaptcha_tags}
+                <input type="submit"/>
+              </form>
+            HTML
+          end
+          
+          get '/verify' do
+            if verify_recaptcha
+              'YES!'
+            else
+              'NO!'
+            end
+          end
 
         get '/' do
             @news_posts = Newspost.all.sort_by(&:created_at).reverse
@@ -180,6 +223,12 @@ module Gemchan
                     startpage = 0
                     end_page = Gemchan::ChanController::number_per_page
                 end
+                @recaptcha  = false
+                if Gemchan::ChanController.configurations[:recaptcha] == true
+                    @recaptcha = true
+                    @recaptch_tags = "#{recaptcha_tags}"
+                end
+                puts @recaptcha_tags
                 @board_data, page_data = Gemchan::ChanController::board_page_data('/'+route)
                 @board_id = @board_data[:id]
                 @action_url = "/create_op"
@@ -203,6 +252,11 @@ module Gemchan
         get '/*/*/?' do |route, op|
             if Gemchan::ChanController::boards_dict.has_key? '/'+route
                 if Op.exists?(post_id: op)
+                    @recaptcha  = false
+                    if Gemchan::ChanController.configurations[:recaptcha] == true
+                        @recaptcha = true
+                        @recaptch_tags = "#{recaptcha_tags}"
+                    end
                     @op_id = op
                     @board_id, @posts = Gemchan::ChanController::thread_page_data(@op_id, '/'+route)
                     @is_thread = true
@@ -218,6 +272,7 @@ module Gemchan
         get '/*/?' do |route|
             redirect "/#{route}/page/0"
         end
+        
 
     end
 end

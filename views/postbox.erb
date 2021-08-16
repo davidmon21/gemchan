@@ -1,6 +1,7 @@
 
 <table id="forms">
 <form action="<%= @action_url %>" enctype="multipart/form-data" method="POST">
+    
     <tr>
             <td> username: <input type="text-area" name="name" value="Anonymous" /> </td>
     </tr>
@@ -24,9 +25,14 @@
     />Post...</textarea>
     </th>
     <tr>
+    
     <td>
     <input name="file" type="file" />
+    <% if @recaptcha %>
+    <%= invisible_recaptcha_tags text: 'Post' %>
+    <% else %>
     <input type="submit" name="submit" value="Post" />
+    <% end %>
     </td>
     </tr>
 </form>

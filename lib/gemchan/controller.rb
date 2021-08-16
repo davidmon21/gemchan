@@ -90,8 +90,10 @@ module Gemchan
         end
 
         def self.generate_trip(plain)
-            salt = plain+"H."[1..2].tr_s(':;<=>?@\^_`',"ABCDEFGabcdef")
-            plain.crypt(salt[1..2])[3..-1]
+            #plain = plain.sub('"', '&quot;').sub("'", '').sub('<', '&lt;').sub('>', '&gt;')
+            salt = plain+"..."[1..2].tr_s(':;<=>?@\^_`',"ABCDEFGabcdef")
+            salt = salt.gsub('[^\.-z]', salt)
+            plain.crypt(salt[1..2])[-10..]
         end
 
         def self.create_news(params)
