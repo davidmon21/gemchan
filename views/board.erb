@@ -5,7 +5,7 @@
 <div id="main">
 <% @page_data.each do |op, posts| %>
     <div id="op_post">
-    <% op_post = Gemchan::Post.find(op) %>
+    <% op_post = Post.find(op) %>
     <div id="info">
     <%= op_post[:name] %>
     <a href="<%= @route %>/<%= op_post[:id] %>#<%= op_post[:id] %>"><%= op_post[:id] %></a> <%= op_post[:created_at] %>
@@ -19,7 +19,7 @@
     <div id="content" >
     <a href="<%= @route %>/<%= op_post[:id] %>"><%= op_post[:subject] %></a>
     <br>
-    <%= Gemchan::ChanController.linkify_content(op_post[:content]) %>
+    <%= ChanController.linkify_content(op_post[:content]) %>
     </div>
     <a href="<%= @route %>/<%= op_post[:id] %>">view</a>
     </div>
@@ -38,7 +38,7 @@
         </div>
         <% end %>
         <div id="content">
-            <%= Gemchan::ChanController.linkify_content(post[:content]) %>
+            <%= ChanController.linkify_content(post[:content]) %>
         </div>
     </div>
     <br>

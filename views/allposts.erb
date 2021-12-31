@@ -1,4 +1,4 @@
-<% posts = Gemchan::Post.all %>
+<% posts = Post.all %>
 <% if posts != nil then %>
 <form action="/delete" method="POST"> 
 <% posts.each do |post| %>

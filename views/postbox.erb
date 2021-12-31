@@ -1,7 +1,5 @@
-
 <table id="forms">
 <form action="<%= @action_url %>" enctype="multipart/form-data" method="POST">
-    
     <tr>
             <td> username: <input type="text-area" name="name" value="Anonymous" /> </td>
     </tr>
@@ -20,19 +18,14 @@
     <th>
     <textarea name="content" rows="6" cols="50"
     <% unless @is_news %> 
-        maxlength=<%=Gemchan::ChanController::configurations[:max_post_size]%>
+        maxlength=<%=ChanController::configurations[:max_post_size]%>
     <% end %> 
     />Post...</textarea>
     </th>
     <tr>
-    
     <td>
     <input name="file" type="file" />
-    <% if @recaptcha %>
-    <%= invisible_recaptcha_tags text: 'Post' %>
-    <% else %>
     <input type="submit" name="submit" value="Post" />
-    <% end %>
     </td>
     </tr>
 </form>

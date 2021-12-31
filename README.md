@@ -23,7 +23,7 @@ Usage
 Author
 ------
 
-david <david DOT monfort1989 AT gmail DOT com>
+david <david DOT monfort DOT 1989 AT gmail DOT com>
 	
 Bugs
 ----

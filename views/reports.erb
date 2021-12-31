@@ -1,7 +1,7 @@
-<% reports = Gemchan::Report.all %>
+<% reports = Report.all %>
 <% if reports != nil then %> 
 <% reports.each do |report| %>
-    <% post = Gemchan::Post.find(report.reported_post) %>
+    <% post = Post.find(report.reported_post) %>
     <div id="post">
         <div id="info">
             <a href="#<%= post[:id] %>"><%= post[:id] %></a> <%= post[:created_at] %>

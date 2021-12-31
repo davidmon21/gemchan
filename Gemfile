@@ -15,3 +15,6 @@ gem "mimemagic"
 gem "rack"
 gem "sqlite3"
 gem "webrick"
+gem 'sass'
+
+gem "rack-attack", "~> 6.5"

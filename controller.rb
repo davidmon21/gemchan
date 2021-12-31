@@ -1,10 +1,11 @@
 require 'yaml'
-module Gemchan
+require_relative 'model.rb'
     class ChanController
         @@boards = {}
         @@config_path = './config.yaml'
         @@configurations = Object
         @@allowed_ftypes = ['png','jpeg','gif','webp']
+        @@naughty_file = "./uploads/naughty_file.png"
 
         def self.init
             Board.find_each do |board|
@@ -62,25 +63,32 @@ module Gemchan
         
         def self.delete_post(params)
             deleted = []
-            for post in params["posts"]
-                post = Post.find(post.to_i)
-                if post.id == post.op_id
-                    #op = Board.find(post.board_id).ops.find_by("post_id = #{post.op_id}")
-                    Op.find(post.id).delete
-                    posts = Post.where("op_id = #{post.id}")
-                    for post in posts
-                        deleted.append(post.id)
+            unless params["posts"] == nil 
+                for post in params["posts"]
+                    post = Post.find(post.to_i)
+                    if post.id == post.op_id
+                        Op.find(post.id).delete
+                        posts = Post.where("op_id = #{post.id}")
+                        for post in posts
+                            deleted.append(post.id)
+                            post.delete
+                        end
+                    elsif deleted.exclude? post.id
                         post.delete
                     end
-                elsif deleted.exclude? post.id
-                    post.delete
                 end
             end
-            if params["images"] != nil
+            unless params["images"] == nil
                 for image in params["images"]
-                    puts image
+                    self.replace_post_image(image)
                 end
             end
+        end
+
+        def self.replace_post_image(image)
+            image_file = File.join("uploads",image)
+            FileUtils.mv(image_file, image_file+".delete")
+            FileUtils.ln_s(naughty_file, image_file)
         end
 
         def self.report_post(params)
@@ -178,10 +186,9 @@ module Gemchan
         end
 
         def self.thread_page_data(thread, route)
-            bid = Gemchan::ChanController::boards_dict[route]
+            bid = ChanController::boards_dict[route]
             posts = Post.where("op_id = #{thread}").sort_by(&:created_at)
             return bid, posts
         end
 
     end
-end

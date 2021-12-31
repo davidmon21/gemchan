@@ -1,5 +1,5 @@
-require_relative 'lib/gemchan.rb'
+require_relative "app.rb"
 
-
-run Gemchan::Server
-
+root = ::File.dirname(__FILE__)
+require ::File.join(root, "app")
+run GemChan

@@ -2,7 +2,7 @@
 <%= erb :nav %>
 <%= erb :header %>
 <%= erb :postbox %>
-<% posts = Gemchan::Board.find(Gemchan::ChanController::boards_dict["/#{params[:board]}"]).posts %>
+<% posts = Board.find(ChanController::boards_dict["/#{params[:board]}"]).posts %>
 <% if posts != nil then %>
 <form action="/delete" method="POST"> 
 <% posts.each do |post| %>

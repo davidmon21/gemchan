@@ -1,34 +1,33 @@
 #!/usr/bin/env ruby
-require_relative '../lib/gemchan/controller'
-require_relative '../lib/gemchan/model'
-require 'optparse'
-require 'io/console'
-require 'yaml/store'
+require_relative "../lib/gemchan/controller"
+require_relative "../lib/gemchan/model"
+require "optparse"
+require "io/console"
+require "yaml/store"
 
 def create(name)
-    user= Gemchan::User.create(username: name)
-    STDOUT.print "Enter new users password(noecho): " 
-    STDOUT.flush
-    user.password= STDIN.noecho(&:gets).chomp
-    user.save!
+  user = Gemchan::User.create(username: name)
+  STDOUT.print "Enter new users password(noecho): "
+  STDOUT.flush
+  user.password = STDIN.noecho(&:gets).chomp
+  user.save!
 end
 
 #options = { name: "admin", password: "password" }
-options = {:name => nil}
+options = { :name => nil }
 opts = OptionParser.new do |opts|
-    opts.banner = "Usage: #{$0} [options]"
-  
-    opts.on("-u", "--create-user user",
-            "user name") do |name|
-      options[:name] = name
-    end
-    opts.on("-i", "--install",
-            "Install setup") do |name|
-      options[:name] = name
-    end
+  opts.banner = "Usage: #{$0} [options]"
+
+  opts.on("-u", "--create-user user",
+          "user name") do |name|
+    options[:name] = name
+  end
+  opts.on("-i", "--install",
+          "Install setup") do |name|
+    options[:name] = name
+  end
 end.parse!
 
 unless options[:name].nil?
   create(options[:name])
 end
-
